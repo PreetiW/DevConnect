@@ -1,10 +1,12 @@
+//// Feeds-mf App webpack config
+
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const deps = require("./package.json").dependencies;
 module.exports = (_, argv) => ({
   output: {
-    publicPath: "http://localhost:8001/",
+    publicPath: "http://localhost:9001/",
   },
 
   resolve: {
@@ -12,7 +14,7 @@ module.exports = (_, argv) => ({
   },
 
   devServer: {
-    port: 8001,
+    port: 9001,
     historyApiFallback: true,
   },
 
@@ -41,10 +43,12 @@ module.exports = (_, argv) => ({
 
   plugins: [
     new ModuleFederationPlugin({
-      name: "feeds_mf",
+      name: "feedsMF",
       filename: "remoteEntry.js",
       remotes: {},
-      exposes: {},
+      exposes: {
+        './Feeds': './src/Feeds.jsx',
+      },
       shared: {
         ...deps,
         react: {

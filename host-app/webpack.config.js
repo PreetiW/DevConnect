@@ -1,10 +1,12 @@
+//// Host App webpack config
+
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const deps = require("./package.json").dependencies;
 module.exports = (_, argv) => ({
   output: {
-    publicPath: "http://localhost:8000/",
+    publicPath: "http://localhost:9000/",
   },
 
   resolve: {
@@ -12,7 +14,7 @@ module.exports = (_, argv) => ({
   },
 
   devServer: {
-    port: 8000,
+    port: 9000,
     historyApiFallback: true,
   },
 
@@ -41,9 +43,11 @@ module.exports = (_, argv) => ({
 
   plugins: [
     new ModuleFederationPlugin({
-      name: "host_app",
+      name: "devconnect",
       filename: "remoteEntry.js",
-      remotes: {},
+      remotes: {
+        'feeds-mf': 'feedsMF@http://localhost:9001/remoteEntry.js', // Remote URL of Feeds Micro-Frontend
+      },
       exposes: {},
       shared: {
         ...deps,
